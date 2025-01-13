@@ -1,6 +1,6 @@
 import React from "react";
 import MineCell from "./mineCell"
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export interface Cell {
     isMine: boolean,
@@ -9,239 +9,98 @@ export interface Cell {
     // isFlagged: boolean
 }
 
+const directions = [
+    [-1, -1], [-1, 0], [-1, 1],
+    [0, -1], [0, 1],
+    [1, -1], [1, 0], [1, 1]
+];
 
-const MineBoard = ({ difficulties, mines }: { difficulties: number, mines: number })=> {
 
-    const board: Cell[][] = []
-    const [clicked,setClicked]=useState(0)
-    let plannedMines = 0
+const MineBoard = ({ difficulties, mines }: { difficulties: number, mines: number }) => {
 
-    for (let i = 0; i < difficulties; i++) {
-        board.push([]);
-        for (let j = 0; j < difficulties; j++) {
-            const cell: Cell = {
-                isMine: false,
-                isRevealed: false,
-                neighborCount: 0,
-            };
-            board[i].push(cell);
-        }
-    }
+    const [board, setBoard] = useState<Cell[][]>([])
 
-    while (plannedMines < mines) {
-        const row = Math.floor(Math.random() * difficulties);
-        const col = Math.floor(Math.random() * difficulties);
-        if (!board[row][col].isMine) {
-            board[row][col].isMine = true;
-            plannedMines++;
-        }
-    }
+    useEffect(() => {
+        let newBoard: Cell[][] = []
+        let plannedMines = 0
 
-    // for (let z = 0; z < difficulties; z++) {
-    //     for (let r = 0; r < difficulties; r++) {
-    //         if (board[z][r].isMine == false) {
-    //             if (z == 0) {
-    //                 if (r == 0) {
-    //                     if (board[z + 1][r + 1].isMine == true) {
-    //                         board[z][r].neighborCount++
-    //                     }
-    //                     if (board[z][r + 1].isMine == true) {
-    //                         board[z][r].neighborCount++
-    //                     }
-    //                     if (board[z + 1][r].isMine == true) {
-    //                         board[z][r].neighborCount++
-    //                     }
-    //                 }
-    //                 if (r > 0 && r < difficulties - 1) {
-    //                     if (board[z][r + 1].isMine == true) {
-    //                         board[z][r].neighborCount++
-    //                     }
-    //                     if (board[z][r - 1].isMine == true) {
-    //                         board[z][r].neighborCount++
-    //                     }
-    //                     if (board[z + 1][r - 1].isMine == true) {
-    //                         board[z][r].neighborCount++
-    //                     }
-    //                     if (board[z + 1][r].isMine == true) {
-    //                         board[z][r].neighborCount++
-    //                     }
-    //                     if (board[z + 1][r + 1].isMine == true) {
-    //                         board[z][r].neighborCount++
-    //                     }
-    //                 }
-    //                 if (r == difficulties - 1) {
-    //                     if (board[z][r - 1].isMine == true) {
-    //                         board[z][r].neighborCount++
-    //                     }
-    //                     if (board[z + 1][r - 1].isMine == true) {
-    //                         board[z][r].neighborCount++
-    //                     }
-    //                     if (board[z + 1][r].isMine == true) {
-    //                         board[z][r].neighborCount++
-    //                     }
-    //                 }
-    //             }
-    //             if (z > 0 && z < difficulties - 1) {
-    //                 if (r == 0) {
-    //                     if (board[z - 1][r].isMine == true) {
-    //                         board[z][r].neighborCount++
-    //                     }
-    //                     if (board[z - 1][r + 1].isMine == true) {
-    //                         board[z][r].neighborCount++
-    //                     }
-    //                     if (board[z][r + 1].isMine == true) {
-    //                         board[z][r].neighborCount++
-    //                     }
-    //                     if (board[z + 1][r].isMine == true) {
-    //                         board[z][r].neighborCount++
-    //                     }
-    //                     if (board[z + 1][r + 1].isMine == true) {
-    //                         board[z][r].neighborCount++
-    //                     }
-    //                 }
-    //                 if (r > 0 && r < difficulties - 1) {
-    //                     if (board[z - 1][r - 1].isMine == true) {
-    //                         board[z][r].neighborCount++
-    //                     }
-    //                     if (board[z - 1][r].isMine == true) {
-    //                         board[z][r].neighborCount++
-    //                     }
-    //                     if (board[z - 1][r + 1].isMine == true) {
-    //                         board[z][r].neighborCount++
-    //                     }
-    //                     if (board[z][r - 1].isMine == true) {
-    //                         board[z][r].neighborCount++
-    //                     }
-    //                     if (board[z][r + 1].isMine == true) {
-    //                         board[z][r].neighborCount++
-    //                     }
-    //                     if (board[z + 1][r - 1].isMine == true) {
-    //                         board[z][r].neighborCount++
-    //                     }
-    //                     if (board[z + 1][r].isMine == true) {
-    //                         board[z][r].neighborCount++
-    //                     }
-    //                     if (board[z + 1][r + 1].isMine == true) {
-    //                         board[z][r].neighborCount++
-    //                     }
-    //                 }
-    //                 if (r == difficulties - 1) {
-    //                     if (board[z - 1][r - 1].isMine == true) {
-    //                         board[z][r].neighborCount++
-    //                     }
-    //                     if (board[z - 1][r].isMine == true) {
-    //                         board[z][r].neighborCount++
-    //                     }
-    //                     if (board[z][r - 1].isMine == true) {
-    //                         board[z][r].neighborCount++
-    //                     }
-    //                     if (board[z + 1][r - 1].isMine == true) {
-    //                         board[z][r].neighborCount++
-    //                     }
-    //                     if (board[z + 1][r].isMine == true) {
-    //                         board[z][r].neighborCount++
-    //                     }
-    //                 }
-    //             }
-    //             if (z == difficulties - 1) {
-    //                 if (r == 0) {
-    //                     if (board[z - 1][r].isMine == true) {
-    //                         board[z][r].neighborCount++
-    //                     }
-    //                     if (board[z - 1][r + 1].isMine == true) {
-    //                         board[z][r].neighborCount++
-    //                     }
-    //                     if (board[z][r + 1].isMine == true) {
-    //                         board[z][r].neighborCount++
-    //                     }
-    //                 }
-    //                 if (r > 0 && r < difficulties - 1) {
-    //                     if (board[z - 1][r - 1].isMine == true) {
-    //                         board[z][r].neighborCount++
-    //                     }
-    //                     if (board[z - 1][r].isMine == true) {
-    //                         board[z][r].neighborCount++
-    //                     }
-    //                     if (board[z - 1][r + 1].isMine == true) {
-    //                         board[z][r].neighborCount++
-    //                     }
-    //                     if (board[z][r - 1].isMine == true) {
-    //                         board[z][r].neighborCount++
-    //                     }
-    //                     if (board[z][r + 1].isMine == true) {
-    //                         board[z][r].neighborCount++
-    //                     }
-    //                 }
-    //                 if (r == difficulties - 1) {
-    //                     if (board[z - 1][r - 1].isMine == true) {
-    //                         board[z][r].neighborCount++
-    //                     }
-    //                     if (board[z - 1][r].isMine == true) {
-    //                         board[z][r].neighborCount++
-    //                     }
-    //                     if (board[z][r - 1].isMine == true) {
-    //                         board[z][r].neighborCount++
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
-    const directions = [
-        [-1, -1], [-1, 0], [-1, 1],
-        [0, -1],          [0, 1],
-        [1, -1], [1, 0], [1, 1]
-    ];
-
-    for (let z = 0; z < difficulties; z++) {
-        for (let r = 0; r < difficulties; r++) {
-            if (!board[z][r].isMine) {
-                let count = 0;
-                directions.forEach(([dx, dy]) => {
-                    const newRow = z + dx;
-                    const newCol = r + dy;
-                    if (newRow >= 0 && newRow < difficulties && newCol >= 0 && newCol < difficulties) {
-                        if (board[newRow][newCol].isMine) count++;
-                    }
-                });
-                board[z][r].neighborCount = count;
+        for (let i = 0; i < difficulties; i++) {
+            newBoard.push([]);
+            for (let j = 0; j < difficulties; j++) {
+                const cell: Cell = {
+                    isMine: false,
+                    isRevealed: false,
+                    neighborCount: 0,
+                };
+                newBoard[i].push(cell);
             }
         }
+
+        while (plannedMines < mines) {
+            const row = Math.floor(Math.random() * difficulties);
+            const col = Math.floor(Math.random() * difficulties);
+            if (!newBoard[row][col].isMine) {
+                newBoard[row][col].isMine = true;
+                plannedMines++;
+            }
+        }
+
+        for (let z = 0; z < difficulties; z++) {
+            for (let r = 0; r < difficulties; r++) {
+                if (!newBoard[z][r].isMine) {
+                    let count = 0;
+                    directions.forEach(([dx, dy]) => {
+                        const newRow = z + dx;
+                        const newCol = r + dy;
+                        if (newRow >= 0 && newRow < difficulties && newCol >= 0 && newCol < difficulties) {
+                            if (newBoard[newRow][newCol].isMine) count++;
+                        }
+                    });
+                    newBoard[z][r].neighborCount = count;
+                }
+            }
+        }
+
+        setBoard(newBoard)
+
+    }, [difficulties, mines])
+
+    function reveal(oldBoard:Cell[][], rowIndex:number, columnIndex:number){
+
+        if (rowIndex<0 || columnIndex<0 || rowIndex >= difficulties || columnIndex >= difficulties){
+            return oldBoard
+        }
+
+        const cell = oldBoard[rowIndex][columnIndex]
+
+        if (cell.isRevealed){
+            return oldBoard
+        }
+        
+        cell.isRevealed=true
+
+        if (cell.neighborCount == 0 && !cell.isMine){
+            for (const direction of directions){
+                reveal(oldBoard, rowIndex + direction[0], columnIndex + direction[1])
+            }
+        }
+
+        return oldBoard
     }
-    // console.log(board)
-    // console.log(board.map((row:Cell[], rowIndex:number) =>{
-    //     return row.map((cell:Cell, columnIndex)=>{
-    //         <MineCell cell={cell}></MineCell>
-    //     })))
-
-    // function handleClick(rowIndex:number,columnIndex:number){
-    //     if (rowIndex < 0 || columnIndex < 0 || rowIndex >= difficulties || columnIndex >= difficulties) {
-    //         return;
-    //     }
-    //     if (board[rowIndex][columnIndex].isRevealed || board[rowIndex][columnIndex].isMine) {
-    //         return;
-    //     }
-    //     board[rowIndex][columnIndex].isRevealed = true
-
-    //     if (board[rowIndex][columnIndex].neighborCount === 0) {
-    //         for (let x = -1; x <= 1; x++) {
-    //             for (let y = -1; y <= 1; y++) {
-    //                 if (x === 0 && y === 0) continue;
-    //                 handleClick(rowIndex + x, columnIndex + y);
-    //             }
-    //         }
-    //     }
-        // setClicked(clicked+1)
-    // }
 
     return (
         <>
-            {board.map((row:Cell[], rowIndex:number) =>{
-                return row.map((cell:Cell, columnIndex)=>{
-                    return <MineCell 
-                                key={`${rowIndex}-${columnIndex}`}
-                                // onClick={handleClick(rowIndex,columnIndex)}
-                                cell={cell}></MineCell>
+            {board.map((row: Cell[], rowIndex: number) => {
+                return row.map((cell: Cell, columnIndex) => {
+                    return <MineCell
+                        key={`${rowIndex}-${columnIndex}`}
+                        onClick={()=>{
+                            setBoard(oldBoard=>{
+                                const revealedBoard = reveal(oldBoard, rowIndex, columnIndex)
+                                return [...revealedBoard]
+                            })
+                        }}
+                        cell={cell}></MineCell>
                 })
             })}
         </>

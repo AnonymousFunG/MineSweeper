@@ -2,15 +2,15 @@ import React from 'react'
 import {useState} from 'react'
 import { Cell } from './mineBoard'
 
-const MineCell = ({ cell}: {cell:Cell}) => {
+const MineCell = ({ cell, onClick}: {cell:Cell, onClick: ()=>void}) => {
 
-    const [clicked,setClicked]=useState(0)
+    // const [clicked,setClicked]=useState(0)
 
-    const handleClick =()=>{
-        cell.isRevealed = true
-        setClicked(clicked+1)
-        console.log(cell)
-    }
+    // const handleClick =()=>{
+    //     cell.isRevealed = true
+    //     setClicked(clicked+1)
+    //     console.log(cell)
+    // }
 
     return (
         <>
@@ -23,7 +23,7 @@ const MineCell = ({ cell}: {cell:Cell}) => {
                 alignItems: "center",
                 justifyContent: "center",
                 cursor: "pointer"}}
-                onClick={handleClick}>
+                onClick={onClick}>
                 {cell.isRevealed ? (cell.isMine ? '💣' : cell.neighborCount || '') : ''}
                 </div>
         </>
