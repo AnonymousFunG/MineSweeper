@@ -10,7 +10,8 @@ export default function Home() {
   const [mine, setMine] = useState(10)
 
   const handleMinusDifficulties = ()=>{
-    setDifficulties(difficulties - 1)
+    if (difficulties>0 && ((difficulties-1)*(difficulties-1)> mine)){
+    setDifficulties(difficulties - 1)}
   }
 
   const handleAddDifficulties = ()=>{
