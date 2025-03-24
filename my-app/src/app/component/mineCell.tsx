@@ -1,5 +1,3 @@
-import React from 'react'
-import {useState} from 'react'
 import { Cell } from './mineBoard'
 
 const MineCell = ({ cell, onClick}: {cell:Cell, onClick: ()=>void}) => {

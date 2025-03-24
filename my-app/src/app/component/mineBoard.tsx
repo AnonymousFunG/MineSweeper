@@ -21,7 +21,7 @@ const MineBoard = ({ difficulties, mines }: { difficulties: number, mines: numbe
     const [board, setBoard] = useState<Cell[][]>([])
 
     useEffect(() => {
-        let newBoard: Cell[][] = []
+        const newBoard: Cell[][] = []
         let plannedMines = 0
 
         for (let i = 0; i < difficulties; i++) {
