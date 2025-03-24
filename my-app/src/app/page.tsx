@@ -46,8 +46,10 @@ export default function Home() {
           <button onClick={handleMinusMines}>-</button>
           <button onClick={handleAddMines}>+</button>
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: `repeat(${difficulties}, 1fr)`, gridTemplateRows: `repeat(${difficulties}, 1fr)` }}>
-          <MineBoard difficulties={difficulties} mines={mine}></MineBoard>
+        <div style={{overflowX:"auto", maxWidth:"100%"}}>
+          <div style={{ display: "grid", gridTemplateColumns: `repeat(${difficulties}, 1fr)`, gridTemplateRows: `repeat(${difficulties}, 1fr)` }}>
+            <MineBoard difficulties={difficulties} mines={mine}></MineBoard>
+          </div>
         </div>
       </div>
     </>
